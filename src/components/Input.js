@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export default Input = styled.input`
+export default styled.input`
   width: 100%;
   border: 2px solid #fff;
   background: #fff;
@@ -13,6 +13,11 @@ export default Input = styled.input`
   transition: border-color 0.2s ease-in;
 
   &:focus {
-    border: 2px solid ${({ theme }) => theme.colors.primary.main}
+    border-color: ${({ theme }) => theme.colors.primary.main}
   }
+
+  ${({ theme, error }) => error && css`
+    color: ${theme.colors.danger.main};
+    border-color: ${theme.colors.danger.main} !important;
+  `}
 `
