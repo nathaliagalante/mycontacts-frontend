@@ -2,6 +2,7 @@ import { useState } from "react";
 import FormGroup from "../FormGroup/FormGroup";
 
 import isEmailValid from "../../utils/isEmailValid";
+import formatPhone from "../../utils/formatPhone";
 import useErrors from "../../hooks/useErrors"
 
 import Input from "../Input";
@@ -17,7 +18,9 @@ export default function ContactForm({ buttonLabel }) {
     const [phone, setPhone] = useState('')
     const [category, setCategory] = useState('')
 
-    const { setError, removeError, getErrorMessageByFieldName } = useErrors()
+    const { errors,setError, removeError, getErrorMessageByFieldName } = useErrors()
+
+    const isFormValid = name && errors.length === 0
 
     function handleNameChange(event) {
         setName(event.target.value)
@@ -39,6 +42,10 @@ export default function ContactForm({ buttonLabel }) {
         }
     }
 
+    function handlePhoneChange(event) {
+        setPhone(formatPhone(event.target.value))
+    }
+
     function handleSubmit(event) {
         event.preventDefault()
 
@@ -52,7 +59,7 @@ export default function ContactForm({ buttonLabel }) {
             <FormGroup error={getErrorMessageByFieldName('name')}>
                 <Input
                     error={getErrorMessageByFieldName('name')}
-                    placeholder="Nome" 
+                    placeholder="Nome *" 
                     value={name}
                     onChange={handleNameChange}
                 />
@@ -72,7 +79,8 @@ export default function ContactForm({ buttonLabel }) {
                 <Input
                     placeholder="Telefone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={handlePhoneChange}
+                    maxLength="15"
                 />
             </FormGroup>
 
@@ -90,7 +98,7 @@ export default function ContactForm({ buttonLabel }) {
             </FormGroup>
 
             <ButtonContainer>
-                <Button type="submit">
+                <Button type="submit" disabled={!isFormValid}>
                     {buttonLabel}
                 </Button>
             </ButtonContainer>
